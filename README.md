@@ -55,9 +55,16 @@ control.LoopRepeat(10, async _=> {
 ```
 ### 入れ子の組み合わせも大丈夫
 
+繰り返し処理の中が見通しがよくなるので コードを書きやすい！が狙いです。
+
 ```
+let _counter = 0;
 control.LoopForEver(async _=> {  // <--- for(;;) を意味する行
-  this.x += 5;
+  this.x += 5; // スプライトのx座標を +5 する
+  _counter += 1;
+  if (_counter == 100) {
+    this.x = 0;
+  }
   // 10回の繰り返し
   await control.LoopRepeat(10, async _=> { // <--- for(let i=0; i<10; i++) を意味する行
     this.y += 10;
@@ -75,5 +82,9 @@ control.LoopForEver(async _=> {  // <--- for(;;) を意味する行
 今後追加しますが、ひとまず レポジトリを作ったものです。
 
 ## 使い方
+これを スクリプトタグに追加
+```
+<script src="https://amami-harhid.github.io/p5playParallelThread20231119/js/ParallelThreadSupport.js"></script>
+```
 
-js/Pico.js をみてね。
+利用方法は、js/Pico.js をみてね。
