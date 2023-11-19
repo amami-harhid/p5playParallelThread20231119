@@ -6,9 +6,9 @@ p.PicoSprite = class extends p.Sprite {
     this.timer = 0;
   }
   build() {
-    const crReg = new p.ControlRegister();
-    this.crReg = crReg;
-    const C = new p.Control(crReg);
+    const mReg = new p.MethodRegister();
+    this.mReg = mReg;
+    const C = new p.Control(mReg);
     
     // 入れ子にする場合には asyncを必ずつけること
     // 入れ子には await を必ずつけること
@@ -20,9 +20,9 @@ p.PicoSprite = class extends p.Sprite {
       })();
       await C.LoopRepeat(10, async _=>{
         this.rotation += 5;
-        if(this.y > H) this.y = 0;
         await C.LoopRepeat(5, _=>{
           this.y += 2;
+          if(this.y > H) this.y = 0;
         })();
       })();
     });
@@ -30,6 +30,6 @@ p.PicoSprite = class extends p.Sprite {
   }
   draw() {
     super.draw();
-    this.crReg.waitCancel = true;
+    this.mReg.setWaitCancel();
   }
 }
