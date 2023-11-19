@@ -44,7 +44,7 @@ p5.play のスプライトの中で、こんな風にコードを書きたい！
 
 ### 永久ループ 
 ```
-control.LoopForEver(async _=> {　// <--- for(;;) を意味する行
+C.LoopForEver(async _=> {　// <--- for(;;) を意味する行
 
 });
 ```
@@ -52,7 +52,7 @@ control.LoopForEver(async _=> {　// <--- for(;;) を意味する行
 
 ```
 // 10回の繰り返し
-control.LoopRepeat(10, async _=> { // <--- for(let i=0; i<10; i++) を意味する行
+C.LoopRepeat(10, async _=> { // <--- for(let i=0; i<10; i++) を意味する行
 
 });
 ```
@@ -62,17 +62,17 @@ control.LoopRepeat(10, async _=> { // <--- for(let i=0; i<10; i++) を意味す�
 
 ```
 let _counter = 0;
-control.LoopForEver(async _=> {  // <--- for(;;) を意味する行
+C.LoopForEver(async _=> {  // <--- for(;;) を意味する行
   this.x += 5; // スプライトのx座標を +5 する
   _counter += 1;
   if (_counter == 100) {
     this.x = 0;
   }
   // 10回の繰り返し
-  await control.LoopRepeat(10, async _=> { // <--- for(let i=0; i<10; i++) を意味する行
+  await C.LoopRepeat(10, async _=> { // <--- for(let i=0; i<10; i++) を意味する行
     this.y += 10;
     // 30回の繰り返し
-    await control.LoopRepeat(30, async _=> { // <--- for(let i=0; i<30; i++) を意味する行
+    await C.LoopRepeat(30, async _=> { // <--- for(let i=0; i<30; i++) を意味する行
       this.rotation += 10;
     });  
   });
