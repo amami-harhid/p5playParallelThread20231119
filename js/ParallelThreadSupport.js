@@ -22,67 +22,65 @@ p5.prototype.registerMethod('init', function() {
     }
     resolve();
   });  
-  p.ControlRegister = class {
+  p.MethodRegister = class {
     constructor(self){
       this.self = self;
-      this.methodRegester = new Map();
+      this.regester = new Map();
       this.waitCancel = false;
     }
     isRegisted(_f){
-      return this.methodRegester.has(_f);
+      return this.regester.has(_f);
     }
     regist(_f, _wrap) {
       if(!this.isRegisted(_f)){
-        this.methodRegester.set(_f,_wrap);
+        this.regester.set(_f,_wrap);
       }
     }
     getWrapMethod(_f) {
-      return this.methodRegester.get(_f);
+      return this.regester.get(_f);
     }
-    setWaitCancel(_cancel) {
+    setWaitCancel(_cancel=true) {
       this.waitCancel = _cancel;
     }    
   }
   p.Control = class {
-    constructor(_controllerRegister){
-      this.cr = _controllerRegister;
+    constructor(_methodRegister){
+      this.mr = _methodRegister;
     }
     LoopForEver(_f) {
-      const cr = this.cr;
-      if(!cr.isRegisted(_f)){
-        const wrap = async() => {
+      const mr = this.mr;
+      if(!mr.isRegisted(_f)){
+        const wrapper = async() => {
           for(;;) {
             await _f();
             await p.Until(
-              _=> cr.waitCancel === true,
-              _=> cr.waitCancel = false
+              _=> mr.waitCancel === true,
+              _=> mr.waitCancel = false
             );
           }
         };
-        cr.regist(_f, wrap);
+        mr.regist(_f, wrapper);
       }
-      const wrapper = cr.getWrapMethod(_f);
+      const wrapper = mr.getWrapMethod(_f);
       return wrapper;
     }
     LoopRepeat(_count, _f) {
-      const cr = this.cr;
-      if(!cr.isRegisted(_f)){
-        const wrap = async() => {
+      const mr = this.mr;
+      if(!mr.isRegisted(_f)){
+        const wrapper = async() => {
           for(let i=0;i<_count;i++) {
             await _f();
             await p.Until(
-              _=>cr.waitCancel === true,
-              _=> cr.waitCancel = false
+              _=> mr.waitCancel === true,
+              _=> mr.waitCancel = false
             );
           }
         };
-        cr.regist(_f, wrap);
+        mr.regist(_f, wrapper);
       }
-      const wrapper = cr.getWrapMethod(_f);
+      const wrapper = mr.getWrapMethod(_f);
       return wrapper;
     }  
   }
   
 });
-
-
